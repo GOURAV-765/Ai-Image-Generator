@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+        <!--TITLE-->
+        <h1 class="title">
+            <i class="fa-solid fa-wand-magic-sparkles title_icon"></i>
+            <span class="title_text">AI Image Generator</span>
+        </h1>
+
+        <div class="form-and-image">
+            <!----FORM CONTAINER-->
+            <section class="form-container">
+                <!--PROMPT INPUT-->
+                <textarea class="form-container__prompt-input" id="prompt" rows="5" placeholder="Describe your image..."></textarea>
+                <div class="form-container__dropdown-group">
+                        <!-----DROPDOWN STTYLE-->
+                        <select class="form-container__dropdown" id="dropdownStyles">
+                            <option value="realistic">Realistic</option>
+                            <option value="anime">Anime</option>
+                            <option value="flux-schnell">Flux Schnell</option>
+                        </select>
+                        <!-----DROPDOWN RATIO-->
+                        <select class="form-container__dropdown" id="dropdownRatio">
+                            <option value="1:1">1:1</option>
+                            <option value="16:9">16:9</option>
+                            <option value="9:16">9:16</option>
+                        </select>
+                </div>
+                <!--GENERATE IMAGE BUTTON -->
+                <button class="form-container__button" onclick="generateImage()">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Generate Image
+                </button>
+            </section>
+
+            <!--IMAGE CONTAINER-->
+            <section class="image-container" id="imageContainer">
+                <!--IMAGE RESULT-->
+                <img class="image-container__image-result" id="imageResult" src="image of ai.avif">
+
+                <div class=" image-container__layer"></div>
+                <button class="image-container__download-button" onclick="downloadImage()">
+                 <i class="fa-solid fa-download"></i>
+                </button>
+
+                <!--LOADING CONTAINER-->
+                <div class=" image-container__loading-container">
+                    <svg class="image-container__loading-spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><radialGradient id="a11" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)"><stop offset="0" stop-color="#2356FF"></stop><stop offset=".3" stop-color="#2356FF" stop-opacity=".9"></stop><stop offset=".6" stop-color="#2356FF" stop-opacity=".6"></stop><stop offset=".8" stop-color="#2356FF" stop-opacity=".3"></stop><stop offset="1" stop-color="#2356FF" stop-opacity="0"></stop></radialGradient><circle transform-origin="center" fill="none" stroke="url(#a11)" stroke-width="20" stroke-linecap="round" stroke-dasharray="200 1000" stroke-dashoffset="0" cx="100" cy="100" r="70"><animateTransform type="rotate" attributeName="transform" calcMode="spline" dur="2" values="360;0" keyTimes="0;1" keySplines="0 0 1 1" repeatCount="indefinite"></animateTransform></circle><circle transform-origin="center" fill="none" opacity=".2" stroke="#2356FF" stroke-width="20" stroke-linecap="round" cx="100" cy="100" r="70"></circle>
+                    </svg>
+                    <span class="image-container__loading-text">Generating Image...</span>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+     <!-- FOOTER -->
+    <div class="footer">© 2025 AI Image Generator by Gourav. All rights reserved.
+
+</div>
+  
+    <script src="script.js"></script>
+    
+</body>
+</html>
+
