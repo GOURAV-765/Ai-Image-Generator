@@ -228,15 +228,6 @@ body {
 }
 
 
-.footer { 
-    position: absolute; 
-    bottom: 0; 
-    left: 0; 
-    z-index: 10;
-    margin-left: 535px;
-    color: rgba(107, 108, 109, 0.527);
-}
-
 
 
 @media screen and (max-width: 765px) {
@@ -255,5 +246,7 @@ body {
         margin: 10px;
         transform: scale(1.1);
       }   
-     
+        
 }
+
+     
