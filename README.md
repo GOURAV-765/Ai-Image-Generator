@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-**AIMAIX** is a modern web-based AI image generator that allows users to create unique images from simple text prompts using powerful AI models (e.g., DALL·E). Built with HTML, CSS, and JavaScript, it features a smooth, responsive UI with fast image rendering and dynamic generation.
+**AIMAGIX** is a modern web-based AI image generator that allows users to create unique images from simple text prompts using powerful AI models (e.g., DALL·E). Built with HTML, CSS, and JavaScript, it features a smooth, responsive UI with fast image rendering and dynamic generation.
 
 ![Screenshot 2025-07-05 125408](https://github.com/user-attachments/assets/8550a77b-7d8d-4b84-8e87-77e4d1a5e73d)
 
