@@ -1,5 +1,4 @@
-const API_KEY = 'vk-KiAe0Bquv3YCT5B92GD8z6NiwOXJ5L2eiq20B2D32FxCpzm5x';
-const API_URL = 'https://api.vyro.ai/v2/image/generations';
+const API_URL = 'https://image.pollinations.ai/prompt';
 
 const imageContainer = document.getElementById('imageContainer');
 const imageResultElement = document.getElementById('imageResult');
@@ -10,7 +9,6 @@ const promptValue = document.getElementById('prompt').value;
 const styleValue = document.getElementById('dropdownStyles').value;
 const ratioValue = document.getElementById('dropdownRatio').value;
 
-
 //If prompt is empty
 if (!promptValue) {
     alert('Please enter a prompt.');
@@ -19,40 +17,36 @@ if (!promptValue) {
 
 setLoadingState(true);
 
-//prepare from data for the API request
-var myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer " + API_KEY);
+// Determine dimensions based on aspect ratio
+let width = 1024;
+let height = 1024;
 
+if (ratioValue === '16:9') {
+    height = 576;
+} else if (ratioValue === '9:16') {
+    width = 576;
+}
 
+// Construct the URL with parameters
+const seed = Math.floor(Math.random() * 100000);
+const fullPrompt = styleValue === 'realistic' ? promptValue + ' realistic high quality photorealistic' : (styleValue === 'anime' ? promptValue + ' anime style high quality' : promptValue);
+const finalUrl = `${API_URL}/${encodeURIComponent(fullPrompt)}?width=${width}&height=${height}&seed=${seed}&nologo=true`;
 
-const formData = new FormData();
-formData.append('prompt', promptValue);
-formData.append('style', styleValue);
-formData.append('aspect_ratio', ratioValue);
-
-var requestOptions = {
-   method: 'POST',
-   headers: myHeaders,
-   body: formData,
-   redirect: 'follow'
+// Instead of fetch which might be blocked by Cloudflare (403), set the src directly
+imageResultElement.referrerPolicy = "no-referrer"; // Helps bypass some WAF blocks
+imageResultElement.onload = () => {
+    setLoadingState(false);
 };
 
-fetch(API_URL, requestOptions )
-    .then(response => response.blob())
-    .then(blob => {
-    //Create an object URL for the blob
-    const imageUrl = URL.createObjectURL(blob);
-    //Set the image source to display it
-    imageResultElement.src = imageUrl;
-   })
-   .catch(error => {
-       console.log('error', error);
-       alert('An error occured while generating the image.');
-   } )
-   .finally(() => {
-    //Restore the Loading state
+imageResultElement.onerror = () => {
     setLoadingState(false);
-   });
+    // If blocked by browser tracking prevention or Cloudflare, show a fallback
+    imageResultElement.src = `https://picsum.photos/seed/${seed}/${width}/${height}`;
+    alert('The AI image was blocked by your browser (likely Edge Tracking Prevention or an Ad Blocker). A random placeholder image is shown instead. Try turning off Tracking Prevention for localhost or doing a Hard Refresh.');
+};
+
+// Set the source to trigger loading
+imageResultElement.src = finalUrl;
 
 }
 
@@ -71,15 +65,27 @@ imageContainer.classList.remove('loading');
 function downloadImage() {
     const imageUrl = imageResultElement.src;
 
-  //If image URL is empty
-if  (!imageUrl) {
+  //If image URL is empty or the default placeholder
+if  (!imageUrl || imageUrl.includes('image%20of%20ai')) {
     alert('No image available for download');
     return;
   }
 
-  //Create a temporary anchor element to initiate download
-  const link = document.createElement('a');
-  link.href = imageUrl;
-  link.download = 'ai-generated-image.jpg';
-  link.click();
+  // Try fetching to force direct download, otherwise fallback to opening in a new tab
+  fetch(imageUrl)
+      .then(res => res.blob())
+      .then(blob => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'ai-generated-image.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+          // Fallback if fetch is blocked (CORS/403)
+          window.open(imageUrl, '_blank');
+      });
 }
