@@ -29,8 +29,22 @@ if (ratioValue === '16:9') {
 
 // Construct the URL with parameters
 const seed = Math.floor(Math.random() * 100000);
-const fullPrompt = styleValue === 'realistic' ? promptValue + ' realistic high quality photorealistic' : (styleValue === 'anime' ? promptValue + ' anime style high quality' : promptValue);
-const finalUrl = `${API_URL}/${encodeURIComponent(fullPrompt)}?width=${width}&height=${height}&seed=${seed}&nologo=true`;
+
+let fullPrompt = promptValue;
+let modelParam = '';
+
+// Enhance prompts and select models based on chosen style
+if (styleValue === 'realistic') {
+    fullPrompt += ' ultra-realistic, photorealistic, 8k, highly detailed, professional photography';
+    modelParam = 'flux-realism';
+} else if (styleValue === 'anime') {
+    fullPrompt += ' high quality anime style, masterpiece, studio ghibli, detailed 2D illustration';
+    modelParam = 'flux-anime';
+} else if (styleValue === 'flux-schnell') {
+    modelParam = 'flux';
+}
+
+const finalUrl = `${API_URL}/${encodeURIComponent(fullPrompt)}?width=${width}&height=${height}&seed=${seed}&model=${modelParam}&nologo=true`;
 
 // Instead of fetch which might be blocked by Cloudflare (403), set the src directly
 imageResultElement.referrerPolicy = "no-referrer"; // Helps bypass some WAF blocks
